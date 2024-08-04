@@ -1,0 +1,32 @@
+name: Trovu
+description: "Trovu, never forget your fake booking"
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.4.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.6
+  json_theme: ^6.5.0+1
+  flutter_launcher_icons: ^0.13.1
+  flutter_localization: ^0.2.1
+  intl: ^0.19.0
+  carousel_slider_plus: ^6.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  generate: true
+  uses-material-design: true
+  assets:
+    - assets/theme.json
+    - assets/images/trovu_classic.png
+    - assets/images/trovu_transparent.png
+    - assets/images/trovu_background.png
+    - assets/images/trovu_black.png
+    - assets/images/scroll.gif
