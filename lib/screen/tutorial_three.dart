@@ -1,3 +1,5 @@
+import 'package:Trovu/screen/connexion.dart';
+import 'package:Trovu/screen/inscription.dart';
 import 'package:Trovu/styles/buttonStyle.dart';
 import 'package:flutter/material.dart';
 import 'package:Trovu/styles/textStyle.dart';
@@ -36,7 +38,9 @@ class TutorialThree extends StatelessWidget {
                         )),
                     const SizedBox(height: 100),
                     ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          redirectAfterTutorial(context);
+                        },
                         style: btnPrimaryStyle(context),
                         child: const Text("C'est parti !")),
                     const SizedBox(height: 30),
@@ -47,4 +51,20 @@ class TutorialThree extends StatelessWidget {
           )),
     );
   }
+}
+
+void redirectAfterTutorial(BuildContext context) {
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    try {
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const Inscription()),
+          (route) => false);
+    } catch (e) {
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const Inscription()),
+          (route) => false);
+    }
+  });
 }

@@ -4,5 +4,10 @@
     "tutorial_one_description": "Never forget a false booking again",
     "tutorial_two_description": "With Trovu, create your own reservation history and keep track of tables that don't show up. Save information with a single click, and find it again whenever you're in doubt!",
     "tutorial_two_title": "\"Another 8 unfulfilled reservations tonight!\"",
-    "tutorial_three_description": "Inscrivez-vous maintenant pour ne jamais perdre vos mauvaises réservations en toute simplicité !"
+    "tutorial_three_description": "Inscrivez-vous maintenant pour ne jamais perdre vos mauvaises réservations en toute simplicité !",
+    "connexion_email": "Email",
+    "connexion_password": "Password",
+    "connexion_button": "Sign in",
+    "inscription_username": "Name",
+    "inscription_button": "Sign up"
 }
