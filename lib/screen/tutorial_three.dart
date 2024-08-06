@@ -1,9 +1,13 @@
+import 'package:Trovu/screen/auth.dart';
 import 'package:Trovu/screen/connexion.dart';
+import 'package:Trovu/screen/home.dart';
 import 'package:Trovu/screen/inscription.dart';
+import 'package:Trovu/service/supabase_auth.dart';
 import 'package:Trovu/styles/buttonStyle.dart';
 import 'package:flutter/material.dart';
 import 'package:Trovu/styles/textStyle.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class TutorialThree extends StatelessWidget {
   const TutorialThree({super.key});
@@ -56,14 +60,22 @@ class TutorialThree extends StatelessWidget {
 void redirectAfterTutorial(BuildContext context) {
   WidgetsBinding.instance.addPostFrameCallback((_) {
     try {
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => const Inscription()),
-          (route) => false);
+      if (Supabase.instance.client.auth.currentUser != null) {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (context) => const Home(showSnackbar: false)),
+            (route) => false);
+      } else {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const Auth()),
+            (route) => false);
+      }
     } catch (e) {
       Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => const Inscription()),
+          MaterialPageRoute(builder: (context) => const Auth()),
           (route) => false);
     }
   });

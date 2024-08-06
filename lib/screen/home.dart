@@ -1,4 +1,6 @@
+import 'package:Trovu/provider/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Home extends StatelessWidget {
   final bool showSnackbar;
@@ -7,12 +9,22 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
     if (showSnackbar) {
       Future.delayed(Duration.zero, () {
         _showLoginSnackbar(context);
       });
     }
-    return const Scaffold();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Home'),
+      ),
+      body: Center(
+        child: userProvider.user == null
+            ? const Text('No user')
+            : Text('Welcome, ${userProvider.user!.email}'),
+      ),
+    );
   }
 }
 

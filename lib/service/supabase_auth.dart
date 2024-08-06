@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SupabaseAuth {
   final supabase = Supabase.instance.client;
 
-  Future<AuthResponse> handlerUserConnexion(String email, String password) {
+  Future<AuthResponse> handlerUserConnexion(
+      String email, String password) async {
     try {
       return supabase.auth.signInWithPassword(email: email, password: password);
     } catch (e) {
@@ -21,5 +24,22 @@ class SupabaseAuth {
     } catch (e) {
       rethrow;
     }
+  }
+
+  Future<AuthResponse> handlerUserConnexionWithGoogle(
+      String idToken, String accessToken) {
+    try {
+      return supabase.auth.signInWithIdToken(
+        provider: OAuthProvider.google,
+        idToken: idToken,
+        accessToken: accessToken,
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  bool userConnected() {
+    return supabase.auth.currentSession != null;
   }
 }

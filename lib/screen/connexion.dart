@@ -1,10 +1,14 @@
 import 'dart:math';
 
+import 'package:Trovu/model/user.dart';
+import 'package:Trovu/provider/user_provider.dart';
 import 'package:Trovu/screen/home.dart';
 import 'package:Trovu/service/supabase_auth.dart';
+import 'package:Trovu/service/user_service.dart';
 import 'package:Trovu/styles/buttonStyle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -79,6 +83,14 @@ class _ConnexionState extends State<Connexion> {
                   try {
                     final response = await SupabaseAuth().handlerUserConnexion(
                         emailController.text, passwordController.text);
+
+                    UserModel? user = await UserService().setupUser(response);
+
+                    if (user != null && context.mounted) {
+                      final userProvider =
+                          Provider.of<UserProvider>(context, listen: false);
+                      userProvider.setUser(user);
+                    }
 
                     Navigator.push(
                         context,

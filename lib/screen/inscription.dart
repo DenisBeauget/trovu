@@ -1,8 +1,12 @@
+import 'package:Trovu/model/user.dart';
+import 'package:Trovu/provider/user_provider.dart';
 import 'package:Trovu/screen/home.dart';
 import 'package:Trovu/service/supabase_auth.dart';
+import 'package:Trovu/service/user_service.dart';
 import 'package:Trovu/styles/buttonStyle.dart';
 import 'package:Trovu/styles/textStyle.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -126,6 +130,16 @@ class _InscriptionState extends State<Inscription> {
                                   emailController.text,
                                   passwordController.text,
                                   usernameController.text);
+
+                          UserModel? user =
+                              await UserService().setupUser(response);
+
+                          if (user != null && context.mounted) {
+                            final userProvider = Provider.of<UserProvider>(
+                                context,
+                                listen: false);
+                            userProvider.setUser(user);
+                          }
 
                           Navigator.push(
                               context,
