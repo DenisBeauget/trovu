@@ -6,7 +6,7 @@ import 'package:Trovu/screen/inscription.dart';
 import 'package:Trovu/service/google_auth.dart';
 import 'package:Trovu/service/supabase_auth.dart';
 import 'package:Trovu/service/user_service.dart';
-import 'package:Trovu/styles/buttonStyle.dart';
+import 'package:Trovu/styles/button_style.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';

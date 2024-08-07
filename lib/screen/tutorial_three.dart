@@ -3,9 +3,9 @@ import 'package:Trovu/screen/connexion.dart';
 import 'package:Trovu/screen/home.dart';
 import 'package:Trovu/screen/inscription.dart';
 import 'package:Trovu/service/supabase_auth.dart';
-import 'package:Trovu/styles/buttonStyle.dart';
+import 'package:Trovu/styles/button_style.dart';
 import 'package:flutter/material.dart';
-import 'package:Trovu/styles/textStyle.dart';
+import 'package:Trovu/styles/text_style.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 

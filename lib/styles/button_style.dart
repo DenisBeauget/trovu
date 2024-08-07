@@ -1,4 +1,4 @@
-import 'package:Trovu/styles/textStyle.dart';
+import 'package:Trovu/styles/text_style.dart';
 import 'package:flutter/material.dart';
 
 btnPrimaryStyle(BuildContext context) {

@@ -3,8 +3,9 @@ import 'package:Trovu/provider/user_provider.dart';
 import 'package:Trovu/screen/home.dart';
 import 'package:Trovu/service/supabase_auth.dart';
 import 'package:Trovu/service/user_service.dart';
-import 'package:Trovu/styles/buttonStyle.dart';
-import 'package:Trovu/styles/textStyle.dart';
+import 'package:Trovu/styles/button_style.dart';
+import 'package:Trovu/styles/snackbar_style.dart';
+import 'package:Trovu/styles/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -25,9 +26,17 @@ class Inscription extends StatefulWidget {
 
 class _InscriptionState extends State<Inscription> {
   bool checkedValue = false;
+  bool _obscureText = true;
+
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final usernameController = TextEditingController();
+
+  void _toggleVisibility() {
+    setState(() {
+      _obscureText = !_obscureText;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -93,12 +102,19 @@ class _InscriptionState extends State<Inscription> {
                     hintText: AppLocalizations.of(context)!.connexion_password,
                     prefixIcon:
                         Icon(Icons.lock, color: Theme.of(context).primaryColor),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _obscureText ? Icons.visibility_off : Icons.visibility,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      onPressed: _toggleVisibility,
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide.none,
                     ),
                   ),
-                  obscureText: true,
+                  obscureText: _obscureText,
                 ),
               ),
               const SizedBox(height: 40),
@@ -125,14 +141,17 @@ class _InscriptionState extends State<Inscription> {
                 onPressed: checkedValue
                     ? () async {
                         try {
+                          UserModel? user;
                           final response = await SupabaseAuth()
                               .handlerUserCreation(
                                   emailController.text,
                                   passwordController.text,
                                   usernameController.text);
 
-                          UserModel? user =
-                              await UserService().setupUser(response);
+                          if (response.user != null &&
+                              response.session != null) {
+                            user = await UserService().setupUser(response);
+                          }
 
                           if (user != null && context.mounted) {
                             final userProvider = Provider.of<UserProvider>(
@@ -146,8 +165,12 @@ class _InscriptionState extends State<Inscription> {
                               MaterialPageRoute(
                                   builder: (context) =>
                                       const Home(showSnackbar: true)));
-                        } catch (e) {
-                          _showErrorSnackbar(context);
+                        } on AuthApiException catch (e) {
+                          if (e.statusCode == '409') {
+                            showErrorSnackbar(context, "Un compte existe déjà");
+                          } else {
+                            showErrorSnackbar(context, "");
+                          }
                         }
                       }
                     : null,
@@ -162,35 +185,6 @@ class _InscriptionState extends State<Inscription> {
       ),
     );
   }
-}
-
-void _showErrorSnackbar(BuildContext context) {
-  final snackBar = SnackBar(
-    backgroundColor: Theme.of(context).primaryColor,
-    behavior: SnackBarBehavior.floating,
-    elevation: 10,
-    padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-    action: SnackBarAction(
-      label: 'Dismiss',
-      onPressed: () {},
-      textColor: const ColorScheme.light().onPrimaryContainer,
-    ),
-    content: Row(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 5),
-          child: Icon(Icons.close,
-              color: const ColorScheme.light().onPrimaryContainer),
-        ),
-        Text(
-          'Error when logged in!',
-          style: TextStyle(color: const ColorScheme.light().onPrimaryContainer),
-        ),
-      ],
-    ),
-  );
-  ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }
 
 Future<void> _launchUrl() async {

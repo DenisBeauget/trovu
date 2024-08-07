@@ -8,6 +8,8 @@
     "connexion_email": "Email",
     "connexion_password": "Mot de passe",
     "connexion_button": "Connexion",
+    "connexion_error_credentials": "Mauvaise combinaison email/mot de passe",
     "inscription_username": "Nom",
-    "inscription_button": "Inscription"
+    "inscription_button": "Inscription",
+    "snackbar_label": "Fermer"
 }

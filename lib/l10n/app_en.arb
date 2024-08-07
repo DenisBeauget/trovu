@@ -8,6 +8,8 @@
     "connexion_email": "Email",
     "connexion_password": "Password",
     "connexion_button": "Sign in",
+    "connexion_error_credentials": "Bad credentials",
     "inscription_username": "Name",
-    "inscription_button": "Sign up"
+    "inscription_button": "Sign up",
+    "snackbar_label": "Dismiss"
 }
