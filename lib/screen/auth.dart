@@ -16,12 +16,16 @@ class Auth extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (SupabaseAuth().userConnected()) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+    final userProvider = Provider.of<UserProvider>(context);
+
+    if (userProvider.isAuthenticated) {
+      Future.microtask(() {
         Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) => const Home(showSnackbar: false)));
+          context,
+          MaterialPageRoute(
+            builder: (context) => const Home(showSnackbar: true),
+          ),
+        );
       });
     }
 
@@ -41,7 +45,7 @@ class Auth extends StatelessWidget {
               ElevatedButton(
                 style: btnSecondaryStyle(context),
                 onPressed: () {
-                  Navigator.pushReplacement(
+                  Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => const Connexion()));
@@ -52,7 +56,7 @@ class Auth extends StatelessWidget {
               ElevatedButton(
                 style: btnSecondaryStyle(context),
                 onPressed: () {
-                  Navigator.pushReplacement(
+                  Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => const Inscription()));

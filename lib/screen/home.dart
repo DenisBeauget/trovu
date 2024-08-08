@@ -23,7 +23,9 @@ class Home extends StatelessWidget {
       body: Center(
         child: userProvider.user == null
             ? const Text('No user')
-            : Text('Welcome, ${userProvider.user!.email}'),
+            : Text(
+                'Welcome, ${userProvider.user!.email} la forme le s? ${userProvider.user!.display_name}',
+              ),
       ),
     );
   }

@@ -32,9 +32,53 @@ class _ConnexionState extends State<Connexion> {
     });
   }
 
+  Future<void> _login() async {
+    try {
+      final response = await SupabaseAuth().handlerUserConnexion(
+        emailController.text,
+        passwordController.text,
+      );
+
+      if (response.user != null && response.session != null) {
+        final user = await UserService().setupUser(response);
+
+        if (user != null && context.mounted) {
+          final userProvider =
+              Provider.of<UserProvider>(context, listen: false);
+          userProvider.setUser(user);
+
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const Home(showSnackbar: true),
+              ));
+        }
+      }
+    } on AuthApiException catch (e) {
+      if (e.statusCode == '400') {
+        showErrorSnackbar(
+          context,
+          AppLocalizations.of(context)!.connexion_error_credentials,
+        );
+      } else {
+        showErrorSnackbar(context,
+            AppLocalizations.of(context)!.inscription_connexion_default_error);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ),
       backgroundColor: Theme.of(context).cardColor,
       body: Center(
         child: Padding(
@@ -93,38 +137,7 @@ class _ConnexionState extends State<Connexion> {
               ),
               const SizedBox(height: 40),
               ElevatedButton(
-                onPressed: () async {
-                  try {
-                    UserModel? user;
-                    final response = await SupabaseAuth().handlerUserConnexion(
-                        emailController.text, passwordController.text);
-
-                    if (response.user != null && response.session != null) {
-                      user = await UserService().setupUser(response);
-                    }
-
-                    if (user != null && context.mounted) {
-                      final userProvider =
-                          Provider.of<UserProvider>(context, listen: false);
-                      userProvider.setUser(user);
-                    }
-
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                const Home(showSnackbar: true)));
-                  } on AuthApiException catch (e) {
-                    if (e.statusCode == '400') {
-                      showErrorSnackbar(
-                          context,
-                          AppLocalizations.of(context)!
-                              .connexion_error_credentials);
-                    } else {
-                      showErrorSnackbar(context, "");
-                    }
-                  }
-                },
+                onPressed: _login,
                 style: btnPrimaryStyle(context),
                 child: Text(
                   AppLocalizations.of(context)!.connexion_button,

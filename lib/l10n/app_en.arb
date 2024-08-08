@@ -11,5 +11,8 @@
     "connexion_error_credentials": "Bad credentials",
     "inscription_username": "Name",
     "inscription_button": "Sign up",
+    "inscription_error_exist": "An account with this email already exist",
+    "inscription_connexion_default_error": "An error occur, try again",
+    "inscription_conditions": "I agree with the terms of use",
     "snackbar_label": "Dismiss"
 }

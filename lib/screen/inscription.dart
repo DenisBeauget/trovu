@@ -14,7 +14,6 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 final supabase = Supabase.instance.client;
-
 final Uri _url = Uri.parse('https://flutter.dev');
 
 class Inscription extends StatefulWidget {
@@ -38,9 +37,52 @@ class _InscriptionState extends State<Inscription> {
     });
   }
 
+  Future<void> _register() async {
+    try {
+      final response = await SupabaseAuth().handlerUserCreation(
+        emailController.text,
+        passwordController.text,
+        usernameController.text,
+      );
+
+      if (response.user != null && response.session != null) {
+        final user = await UserService().setupUser(response);
+
+        if (user != null && context.mounted) {
+          final userProvider =
+              Provider.of<UserProvider>(context, listen: false);
+          userProvider.setUser(user);
+
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const Home(showSnackbar: true),
+              ));
+        }
+      }
+    } on AuthApiException catch (e) {
+      if (e.statusCode == '409') {
+        showErrorSnackbar(
+            context, AppLocalizations.of(context)!.inscription_error_exist);
+      } else {
+        showErrorSnackbar(context,
+            AppLocalizations.of(context)!.inscription_connexion_default_error);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ),
       backgroundColor: Theme.of(context).cardColor,
       body: Center(
         child: Padding(
@@ -69,7 +111,7 @@ class _InscriptionState extends State<Inscription> {
                       borderSide: BorderSide.none,
                     ),
                   ),
-                  keyboardType: TextInputType.emailAddress,
+                  keyboardType: TextInputType.text,
                 ),
               ),
               const SizedBox(height: 20),
@@ -129,51 +171,18 @@ class _InscriptionState extends State<Inscription> {
                     },
                   ),
                   GestureDetector(
-                      onTap: _launchUrl,
-                      child: Text(
-                          softWrap: true,
-                          style: classicUnderlineMediumText(),
-                          'Je suis d\'accord avec les conditions d\'utilisation')),
+                    onTap: _launchUrl,
+                    child: Text(
+                      AppLocalizations.of(context)!.inscription_conditions,
+                      softWrap: true,
+                      style: classicUnderlineMediumText(),
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: checkedValue
-                    ? () async {
-                        try {
-                          UserModel? user;
-                          final response = await SupabaseAuth()
-                              .handlerUserCreation(
-                                  emailController.text,
-                                  passwordController.text,
-                                  usernameController.text);
-
-                          if (response.user != null &&
-                              response.session != null) {
-                            user = await UserService().setupUser(response);
-                          }
-
-                          if (user != null && context.mounted) {
-                            final userProvider = Provider.of<UserProvider>(
-                                context,
-                                listen: false);
-                            userProvider.setUser(user);
-                          }
-
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const Home(showSnackbar: true)));
-                        } on AuthApiException catch (e) {
-                          if (e.statusCode == '409') {
-                            showErrorSnackbar(context, "Un compte existe déjà");
-                          } else {
-                            showErrorSnackbar(context, "");
-                          }
-                        }
-                      }
-                    : null,
+                onPressed: checkedValue ? _register : null,
                 style: btnPrimaryStyle(context),
                 child: Text(
                   AppLocalizations.of(context)!.inscription_button,

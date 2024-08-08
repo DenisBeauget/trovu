@@ -28,7 +28,7 @@ class UserService {
     if (response.user != null) {
       final user = UserModel(
           email: response.user!.email,
-          display_name: response.user!.email,
+          display_name: response.user!.userMetadata!['display_name'],
           token: response.session!.accessToken);
       await saveUser(user);
       return user;

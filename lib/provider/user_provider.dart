@@ -6,6 +6,8 @@ class UserProvider with ChangeNotifier {
 
   UserModel? get user => _user;
 
+  bool get isAuthenticated => _user != null;
+
   void setUser(UserModel? user) {
     _user = user;
     notifyListeners();
