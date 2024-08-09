@@ -14,5 +14,6 @@
     "inscription_error_exist": "Un compte avec ce mail existe déjà",
     "inscription_connexion_default_error": "Une erreur est survenu",
     "inscription_conditions": "Je suis d'accord avec les conditions d'utilisation",
-    "snackbar_label": "Fermer"
+    "snackbar_label": "Fermer",
+    "snackbar_title": "Connexion réussi !"
 }

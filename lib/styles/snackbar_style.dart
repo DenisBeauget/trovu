@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void showErrorSnackbar(BuildContext context, String? text) {
   final snackBar = SnackBar(
@@ -54,7 +55,7 @@ void showLoginSnackbar(BuildContext context) {
               color: const ColorScheme.light().onPrimaryContainer),
         ),
         Text(
-          'Successfully logged in!',
+          AppLocalizations.of(context)!.snackbar_title,
           style: TextStyle(color: const ColorScheme.light().onPrimaryContainer),
         ),
       ],
