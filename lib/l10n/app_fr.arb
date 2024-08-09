@@ -4,5 +4,15 @@
     "tutorial_one_description": "Pour ne plus jamais oublié une mauvaise réservation",
     "tutorial_two_description": "Avec Trovu, créez votre propre historique de réservation et gardez une trace des tables qui ne se présentent pas. Enregistrez les informations en un seul clic et retrouvez les dès que vous avez un doute !",
     "tutorial_two_title": "\"Encore 8 réservations non honorées ce soir !\"",
-    "tutorial_three_description": "Inscrivez-vous maintenant pour ne jamais perdre vos mauvaises réservations en toute simplicité !"
+    "tutorial_three_description": "Inscrivez-vous maintenant pour ne jamais perdre vos mauvaises réservations en toute simplicité !",
+    "connexion_email": "Email",
+    "connexion_password": "Mot de passe",
+    "connexion_button": "Connexion",
+    "connexion_error_credentials": "Mauvaise combinaison email/mot de passe",
+    "inscription_username": "Nom",
+    "inscription_button": "Inscription",
+    "inscription_error_exist": "Un compte avec ce mail existe déjà",
+    "inscription_connexion_default_error": "Une erreur est survenu",
+    "inscription_conditions": "Je suis d'accord avec les conditions d'utilisation",
+    "snackbar_label": "Fermer"
 }

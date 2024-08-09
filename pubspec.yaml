@@ -14,6 +14,12 @@ dependencies:
   flutter_localization: ^0.2.1
   intl: ^0.19.0
   carousel_slider_plus: ^6.0.0
+  supabase_flutter: ^2.5.11
+  flutter_dotenv: ^5.1.0
+  url_launcher: ^6.3.0
+  google_sign_in: ^6.2.1
+  shared_preferences: ^2.3.1
+  provider: ^6.1.2
 
 dev_dependencies:
   flutter_test:
@@ -24,9 +30,11 @@ flutter:
   generate: true
   uses-material-design: true
   assets:
+    - .env
     - assets/theme.json
     - assets/images/trovu_classic.png
     - assets/images/trovu_transparent.png
     - assets/images/trovu_background.png
     - assets/images/trovu_black.png
+    - assets/images/google.png
     - assets/images/scroll.gif

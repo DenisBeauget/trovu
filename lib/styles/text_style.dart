@@ -14,6 +14,28 @@ TextStyle classicText() {
       fontWeight: FontWeight.normal);
 }
 
+TextStyle classicMediumText() {
+  return TextStyle(
+      color: const ColorScheme.light().inverseSurface,
+      fontSize: 12,
+      fontWeight: FontWeight.normal);
+}
+
+TextStyle classicUnderlineMediumText() {
+  return TextStyle(
+      decoration: TextDecoration.underline,
+      color: const ColorScheme.light().inverseSurface,
+      fontSize: 12,
+      fontWeight: FontWeight.normal);
+}
+
+TextStyle classicSmallText() {
+  return TextStyle(
+      color: const ColorScheme.light().inverseSurface,
+      fontSize: 10,
+      fontWeight: FontWeight.normal);
+}
+
 TextStyle classicTextSurface() {
   return const TextStyle(
       color: Color.fromRGBO(237, 225, 209, 100),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:Trovu/styles/textStyle.dart';
+import 'package:Trovu/styles/text_style.dart';
 
 class TutorialOne extends StatelessWidget {
   const TutorialOne({super.key});
