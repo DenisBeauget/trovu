@@ -1,4 +1,8 @@
 import 'package:Trovu/provider/user_provider.dart';
+import 'package:Trovu/styles/button_style.dart';
+import 'package:Trovu/styles/popup_style.dart';
+import 'package:Trovu/styles/snackbar_style.dart';
+import 'package:Trovu/styles/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -14,7 +18,22 @@ class _HomeAddState extends State<HomeAdd> {
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
-      body: Text('Hello ${userProvider.user!.display_name}'),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Center(
+              child: Text("Bienvenue ${userProvider.user!.display_name}",
+                  style: classicMediumText())),
+          const SizedBox(height: 30),
+          ElevatedButton(
+            onPressed: () {
+              showReportDialog(context);
+            },
+            style: btnPrimaryStyle(context),
+            child: const Text("Signaler"),
+          )
+        ],
+      ),
     );
   }
 }

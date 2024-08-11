@@ -20,6 +20,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  bool _snackBarShown = false;
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
@@ -30,10 +31,10 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<UserProvider>(context);
-    if (widget.showSnackbar) {
+    if (widget.showSnackbar && !_snackBarShown) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         showLoginSnackbar(context);
+        _snackBarShown = true;
       });
     }
     return Scaffold(
