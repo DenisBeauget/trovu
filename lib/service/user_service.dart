@@ -35,4 +35,16 @@ class UserService {
     }
     return null;
   }
+
+  Future<UserModel?> setupForGoogleUser(AuthResponse response) async {
+    if (response.user != null) {
+      final user = UserModel(
+          email: response.user!.email,
+          display_name: response.user!.userMetadata!['name'],
+          token: response.session!.accessToken);
+      await saveUser(user);
+      return user;
+    }
+    return null;
+  }
 }

@@ -5,6 +5,7 @@ import 'package:Trovu/styles/snackbar_style.dart';
 import 'package:Trovu/styles/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:Trovu/service/product_service.dart';
 
 class HomeAdd extends StatefulWidget {
   const HomeAdd({super.key});
@@ -25,12 +26,27 @@ class _HomeAddState extends State<HomeAdd> {
               child: Text("Bienvenue ${userProvider.user!.display_name}",
                   style: classicMediumText())),
           const SizedBox(height: 30),
+          const SizedBox(
+              height: 100,
+              width: 100,
+              child: Image(
+                  fit: BoxFit.contain,
+                  image: AssetImage('assets/images/basket_gif.gif'))),
+          const SizedBox(height: 30),
           ElevatedButton(
-            onPressed: () {
-              showReportDialog(context);
+            onPressed: () async {
+              await ProductService.scanAndSaveProduct();
             },
             style: btnPrimaryStyle(context),
-            child: const Text("Signaler"),
+            child: const Text("Scanner un produit"),
+          ),
+          const SizedBox(height: 30),
+          ElevatedButton(
+            onPressed: () async {
+              await ProductService.scanAndSaveProduct();
+            },
+            style: btnPrimaryStyle(context),
+            child: const Text("Ajout d'un produit"),
           )
         ],
       ),

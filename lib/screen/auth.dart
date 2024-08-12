@@ -74,7 +74,8 @@ class Auth extends StatelessWidget {
                     final response = await SupabaseAuth()
                         .handlerUserConnexionWithGoogle(idToken!, accessToken!);
 
-                    UserModel? user = await UserService().setupUser(response);
+                    UserModel? user =
+                        await UserService().setupForGoogleUser(response);
 
                     if (user != null && context.mounted) {
                       final userProvider =

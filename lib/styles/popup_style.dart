@@ -1,5 +1,4 @@
 import 'package:Trovu/provider/user_provider.dart';
-import 'package:Trovu/service/supabase_report.dart';
 import 'package:Trovu/styles/button_style.dart';
 import 'package:Trovu/styles/snackbar_style.dart';
 import 'package:flutter/material.dart';
@@ -66,11 +65,6 @@ void showReportDialog(BuildContext context) {
                 ));
               } else {
                 try {
-                  SupabaseReport().reportNoShow(
-                      userId: supabase.auth.currentUser!.id,
-                      customerName: name,
-                      email: email,
-                      phone: phone);
                   showReportSnackbar(context);
                 } catch (e) {
                   rethrow;

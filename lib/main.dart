@@ -9,6 +9,7 @@ import 'dart:convert';
 
 import 'package:Trovu/screen/welcome.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:openfoodfacts/openfoodfacts.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -16,6 +17,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await dotenv.load(fileName: ".env");
+
+  OpenFoodAPIConfiguration.userAgent = UserAgent(
+      name: 'Trovu', version: '1.0', system: 'Flutter', url: '', comment: '');
 
   String anonKey = dotenv.env['SUPABASE_KEY'].toString();
 

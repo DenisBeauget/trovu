@@ -124,14 +124,6 @@ class _HomeState extends State<Home> {
               ),
             ],
           ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Fermer'),
-            ),
-          ],
         );
       },
     );
