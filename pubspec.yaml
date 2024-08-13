@@ -24,6 +24,7 @@ dependencies:
   share_plus: ^10.0.0
   openfoodfacts: ^3.12.0
   flutter_barcode_scanner: ^2.0.0
+  google_mobile_ads: ^5.1.0
 
 dev_dependencies:
   flutter_test:

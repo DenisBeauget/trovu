@@ -1,4 +1,5 @@
 import 'package:Trovu/model/product.dart';
+import 'package:Trovu/service/ofa_api_service.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:openfoodfacts/openfoodfacts.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -6,7 +7,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class ProductService {
   static final supabase = Supabase.instance.client;
 
-  static Future<LocalProduct?> scanAndSaveProduct() async {
+  Future<LocalProduct?> scanAndSaveProduct() async {
     try {
       String barcode = await FlutterBarcodeScanner.scanBarcode(
         '#ff6666',
@@ -15,53 +16,53 @@ class ProductService {
         ScanMode.BARCODE,
       );
 
-      if (barcode == '-1') {
-        throw Exception('Scan annulé');
-      }
-
-      final existingProduct = await supabase
-          .from('products')
-          .select()
-          .eq('barcode', barcode)
-          .maybeSingle();
+      LocalProduct? existingProduct = await getLocalProductByBarcode(barcode);
 
       if (existingProduct != null) {
-        return LocalProduct.fromJson(existingProduct);
+        return existingProduct;
       }
 
-      ProductQueryConfiguration configuration = ProductQueryConfiguration(
-          barcode,
-          language: OpenFoodFactsLanguage.FRENCH,
-          fields: [
-            ProductField.NAME,
-            ProductField.IMAGE_FRONT_SMALL_URL,
-            ProductField.NUTRISCORE
-          ],
-          version: ProductQueryVersion.v3);
-
-      ProductResultV3 result =
-          await OpenFoodAPIClient.getProductV3(configuration);
+      ProductResultV3 result = await OfaApiService().getProduct(barcode);
 
       if (result.status == ProductResultV3.statusSuccess) {
         final newProduct = LocalProduct(
+          id: '',
           name: result.product!.productName ?? 'Produit inconnu',
           barcode: barcode,
           nutriscore: result.product!.nutriscore,
           imageUrl: result.product!.imageFrontSmallUrl,
         );
 
-        final productJson = newProduct.toJson();
+        insertProduct(newProduct);
 
-        final insertResult =
-            await supabase.from('products').insert(productJson).single();
-
-        return LocalProduct.fromJson(insertResult);
+        return newProduct;
       } else {
-        throw Exception('Produit non trouvé dans Open Food Facts');
+        throw Exception('Cant find product');
       }
     } catch (e) {
-      print('Erreur lors du scan et de la sauvegarde du produit: $e');
+      print('Error for scanning product: $e');
       return null;
     }
+  }
+
+  Future<void> insertProduct(LocalProduct product) async {
+    await supabase.from('products').insert(product.toJson());
+  }
+
+  Future<LocalProduct?> getLocalProductByBarcode(String barcode) async {
+    try {
+      final product = await supabase
+          .from('products')
+          .select()
+          .eq('barcode', barcode)
+          .maybeSingle();
+
+      if (product != null) {
+        return LocalProduct.fromJson(product);
+      }
+    } catch (e) {
+      rethrow;
+    }
+    return null;
   }
 }

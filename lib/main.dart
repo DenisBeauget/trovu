@@ -57,8 +57,14 @@ class MyApp extends StatelessWidget {
         localeListResolutionCallback: (locales, supportedLocales) {
           if (locales != null && locales.isNotEmpty) {
             if (locales.first.languageCode == 'fr') {
+              OpenFoodAPIConfiguration.globalLanguages =
+                  <OpenFoodFactsLanguage>[OpenFoodFactsLanguage.FRENCH];
+              OpenFoodAPIConfiguration.globalCountry =
+                  OpenFoodFactsCountry.FRANCE;
               return const Locale('fr', '');
             } else {
+              OpenFoodAPIConfiguration.globalLanguages =
+                  <OpenFoodFactsLanguage>[OpenFoodFactsLanguage.ENGLISH];
               return const Locale('en', '');
             }
           }
