@@ -2,7 +2,7 @@ class UserStock {
   final String? userId;
   final String productId;
   final String quantity;
-  final String date;
+  final String? date;
 
   UserStock(
       {required this.userId,

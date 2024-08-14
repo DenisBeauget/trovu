@@ -6,6 +6,7 @@ import 'package:Trovu/styles/button_style.dart';
 import 'package:Trovu/styles/snackbar_style.dart';
 import 'package:Trovu/styles/text_style.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
@@ -81,9 +82,9 @@ class _HomeState extends State<Home> {
                   label: '',
                   activeIcon: Icon(Icons.add_home_outlined)),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.search),
+                  icon: Icon(Icons.kitchen),
                   label: '',
-                  activeIcon: Icon(Icons.search_outlined)),
+                  activeIcon: Icon(Icons.kitchen_outlined)),
               BottomNavigationBarItem(
                   icon: Icon(Icons.bar_chart),
                   label: '',

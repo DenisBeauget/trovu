@@ -1,4 +1,5 @@
 import 'package:Trovu/model/product.dart';
+import 'package:Trovu/model/user_stock.dart';
 import 'package:Trovu/service/user_stocks_service.dart';
 import 'package:Trovu/styles/button_style.dart';
 import 'package:Trovu/styles/snackbar_style.dart';
@@ -35,7 +36,6 @@ void showReportDialog(BuildContext context, LocalProduct? product) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
-      final supabase = Supabase.instance.client;
       final String titleText =
           product == null ? 'Ajouter un produit' : 'Modifier le produit';
       return AlertDialog(
@@ -137,7 +137,9 @@ void showReportDialog(BuildContext context, LocalProduct? product) {
               final name = nameController.text.trim();
               final date = dlcController.text.trim();
 
-              final dateTime = DateFormat('yyyy-MM-dd').parse(date);
+              final dateTime = date != '(optionall)'
+                  ? DateFormat('yyyy-MM-dd').parse(date)
+                  : null;
 
               if (quantity.isEmpty || name.isEmpty) {
                 ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -145,9 +147,15 @@ void showReportDialog(BuildContext context, LocalProduct? product) {
                 ));
               } else {
                 try {
-                  await UserStocksService()
+                  UserStock? result = await UserStocksService()
                       .insertUserStock(product!, quantity, dateTime);
-                  showReportSnackbar(context);
+
+                  if (result != null) {
+                    showReportSnackbar(context);
+                  } else {
+                    showErrorSnackbar(
+                        context, "Erreur pendant l'ajout, réessayez");
+                  }
                 } catch (e) {
                   rethrow;
                 }
