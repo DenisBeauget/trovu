@@ -10,6 +10,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Home extends StatefulWidget {
   final bool showSnackbar;
@@ -101,7 +102,9 @@ class _HomeState extends State<Home> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Center(child: Text('Partage Trovu !', style: classicText())),
+          title: Center(
+              child: Text(AppLocalizations.of(context)!.home_qr_code,
+                  style: classicText())),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -121,7 +124,7 @@ class _HomeState extends State<Home> {
                       'Téléchargez notre application ici : https://flutter.dev');
                 },
                 style: btnPrimaryStyle(context),
-                child: const Text('Partager'),
+                child: Text(AppLocalizations.of(context)!.home_share_button),
               ),
             ],
           ),

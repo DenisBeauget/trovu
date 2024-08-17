@@ -1,7 +1,7 @@
 class UserStock {
   final String? userId;
   final String productId;
-  final String quantity;
+  final int quantity;
   final String? date;
 
   UserStock(

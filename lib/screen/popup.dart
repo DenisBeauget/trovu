@@ -5,7 +5,7 @@ import 'package:Trovu/styles/button_style.dart';
 import 'package:Trovu/styles/snackbar_style.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void showReportDialog(BuildContext context, LocalProduct? product) {
   final TextEditingController nameController =
@@ -14,10 +14,10 @@ void showReportDialog(BuildContext context, LocalProduct? product) {
       TextEditingController(text: product?.barcode);
   final TextEditingController quantityController =
       TextEditingController(text: '1');
-  final TextEditingController nutricoreController =
-      TextEditingController(text: '${product?.nutriscore} (optionnel)');
-  final TextEditingController dlcController =
-      TextEditingController(text: '(optionnel)');
+  final TextEditingController nutricoreController = TextEditingController(
+      text: product != null ? '${product.nutriscore}' : '');
+  final TextEditingController dlcController = TextEditingController();
+  String databaseDate = '';
 
   Future<void> selectDate(BuildContext context) async {
     DateTime? pickedDate = await showDatePicker(
@@ -28,16 +28,19 @@ void showReportDialog(BuildContext context, LocalProduct? product) {
       lastDate: DateTime(2101),
     );
     if (pickedDate != null) {
-      final DateFormat dateFormatter = DateFormat('dd-MM-yyyy');
-      dlcController.text = dateFormatter.format(pickedDate);
+      final DateFormat displayFormatter = DateFormat('dd-MM-yyyy');
+      dlcController.text = displayFormatter.format(pickedDate);
+      final DateTime utcDate = pickedDate.toUtc();
+      databaseDate = utcDate.toIso8601String();
     }
   }
 
   showDialog(
     context: context,
     builder: (BuildContext context) {
-      final String titleText =
-          product == null ? 'Ajouter un produit' : 'Modifier le produit';
+      final String titleText = product == null
+          ? AppLocalizations.of(context)!.popup_add_product
+          : AppLocalizations.of(context)!.popup_modify_product;
       return AlertDialog(
         title: Center(
             child: Text(
@@ -77,43 +80,43 @@ void showReportDialog(BuildContext context, LocalProduct? product) {
               ],
               TextField(
                 controller: nameController,
-                decoration: const InputDecoration(
-                  labelText: 'Nom',
-                  prefixIcon: Icon(Icons.shopping_basket),
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.popup_name,
+                  prefixIcon: const Icon(Icons.shopping_basket),
                 ),
               ),
               const SizedBox(height: 10),
               TextField(
                 controller: codeController,
-                decoration: const InputDecoration(
-                  labelText: 'Code barre',
-                  prefixIcon: Icon(Icons.code),
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.popup_barcode,
+                  prefixIcon: const Icon(Icons.code),
                 ),
               ),
               const SizedBox(height: 10),
               TextField(
                 controller: nutricoreController,
-                decoration: const InputDecoration(
-                  labelText: 'Nutriscore',
-                  prefixIcon: Icon(Icons.score),
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.popup_nutriscore,
+                  prefixIcon: const Icon(Icons.score),
                 ),
               ),
               const SizedBox(height: 10),
               TextField(
                 keyboardType: TextInputType.number,
                 controller: quantityController,
-                decoration: const InputDecoration(
-                  labelText: 'Quantité',
-                  prefixIcon: Icon(Icons.production_quantity_limits),
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.popup_quantity,
+                  prefixIcon: const Icon(Icons.production_quantity_limits),
                 ),
               ),
               const SizedBox(height: 10),
               TextField(
                 keyboardType: TextInputType.datetime,
                 controller: dlcController,
-                decoration: const InputDecoration(
-                  labelText: 'Date limite',
-                  prefixIcon: Icon(Icons.date_range),
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.popup_date,
+                  prefixIcon: const Icon(Icons.date_range),
                 ),
                 readOnly: true,
                 onTap: () async {
@@ -128,33 +131,41 @@ void showReportDialog(BuildContext context, LocalProduct? product) {
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: const Text('Annuler'),
+            child: Text(AppLocalizations.of(context)!.popup_cancel),
           ),
           ElevatedButton(
             style: btnSmallPrimaryStyle(context),
             onPressed: () async {
-              final quantity = quantityController.text.trim();
+              final quantity = int.parse(quantityController.text.trim());
               final name = nameController.text.trim();
-              final date = dlcController.text.trim();
 
-              final dateTime = date != '(optionall)'
-                  ? DateFormat('yyyy-MM-dd').parse(date)
-                  : null;
-
-              if (quantity.isEmpty || name.isEmpty) {
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  content: Text('Veuillez remplir au moins 1 des champs'),
+              if (name.isEmpty ||
+                  (quantity.isNegative || quantity.isNaN) ||
+                  codeController.text.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text(
+                      AppLocalizations.of(context)!.popup_mandatory_fields),
                 ));
               } else {
                 try {
+                  LocalProduct? productInsert = product;
+                  if (product == null) {
+                    //manual case
+                    productInsert = LocalProduct(
+                        id: '',
+                        name: name,
+                        barcode: codeController.text,
+                        nutriscore: nutricoreController.text);
+                  }
+
                   UserStock? result = await UserStocksService()
-                      .insertUserStock(product!, quantity, dateTime);
+                      .insertUserStock(productInsert!, quantity, databaseDate);
 
                   if (result != null) {
                     showReportSnackbar(context);
                   } else {
                     showErrorSnackbar(
-                        context, "Erreur pendant l'ajout, réessayez");
+                        context, AppLocalizations.of(context)!.popup_add_error);
                   }
                 } catch (e) {
                   rethrow;
@@ -162,7 +173,7 @@ void showReportDialog(BuildContext context, LocalProduct? product) {
                 Navigator.of(context).pop();
               }
             },
-            child: const Text('Ajoutez'),
+            child: Text(AppLocalizations.of(context)!.popup_add_button),
           ),
         ],
       );

@@ -46,7 +46,8 @@ class TutorialThree extends StatelessWidget {
                           redirectAfterTutorial(context);
                         },
                         style: btnPrimaryStyle(context),
-                        child: const Text("C'est parti !")),
+                        child: Text(AppLocalizations.of(context)!
+                            .tutorial_three_button)),
                     const SizedBox(height: 30),
                   ],
                 ),

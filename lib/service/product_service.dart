@@ -29,7 +29,7 @@ class ProductService {
           id: '',
           name: result.product!.productName ?? 'Produit inconnu',
           barcode: barcode,
-          nutriscore: result.product!.nutriscore,
+          nutriscore: result.product!.nutriscore?.toUpperCase(),
           imageUrl: result.product!.imageFrontSmallUrl,
         );
 
@@ -40,13 +40,17 @@ class ProductService {
         throw Exception('Cant find product');
       }
     } catch (e) {
-      print('Error for scanning product: $e');
       return null;
     }
   }
 
-  Future<void> insertProduct(LocalProduct product) async {
-    await supabase.from('products').insert(product.toJson());
+  Future<LocalProduct> insertProduct(LocalProduct product) async {
+    final response = await supabase
+        .from('products')
+        .insert(product.toJson())
+        .select()
+        .single();
+    return LocalProduct.fromJson(response);
   }
 
   Future<LocalProduct?> getLocalProductByBarcode(String barcode) async {
@@ -56,6 +60,20 @@ class ProductService {
           .select()
           .eq('barcode', barcode)
           .maybeSingle();
+
+      if (product != null) {
+        return LocalProduct.fromJson(product);
+      }
+    } catch (e) {
+      rethrow;
+    }
+    return null;
+  }
+
+  Future<LocalProduct?> getLocalProductById(String id) async {
+    try {
+      final product =
+          await supabase.from('products').select().eq('id', id).maybeSingle();
 
       if (product != null) {
         return LocalProduct.fromJson(product);

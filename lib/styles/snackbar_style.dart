@@ -72,7 +72,7 @@ void showReportSnackbar(BuildContext context) {
     padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
     action: SnackBarAction(
-      label: 'Fermer',
+      label: AppLocalizations.of(context)!.snackbar_close,
       onPressed: () {},
       textColor: const ColorScheme.light().onPrimaryContainer,
     ),
@@ -84,7 +84,7 @@ void showReportSnackbar(BuildContext context) {
               color: const ColorScheme.light().onPrimaryContainer),
         ),
         Text(
-          'Ajout réussi !',
+          AppLocalizations.of(context)!.snackbar_add,
           style: TextStyle(color: const ColorScheme.light().onPrimaryContainer),
         ),
       ],

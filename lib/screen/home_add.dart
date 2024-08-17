@@ -1,12 +1,14 @@
 import 'package:Trovu/model/product.dart';
 import 'package:Trovu/provider/user_provider.dart';
 import 'package:Trovu/styles/button_style.dart';
-import 'package:Trovu/styles/popup_style.dart';
+import 'package:Trovu/screen/popup.dart';
+import 'package:Trovu/styles/snackbar_style.dart';
 import 'package:Trovu/styles/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:Trovu/service/product_service.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeAdd extends StatefulWidget {
   const HomeAdd({super.key});
@@ -27,7 +29,7 @@ class _HomeAddState extends State<HomeAdd> {
 
   _initBannerAd() {
     _bannerAd = BannerAd(
-      adUnitId: 'ca-app-pub-6432978385593557/8904586750',
+      adUnitId: 'ca-app-pub-3940256099942544/9214589741',
       size: AdSize.fullBanner,
       request: const AdRequest(),
       listener: BannerAdListener(
@@ -48,6 +50,8 @@ class _HomeAddState extends State<HomeAdd> {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
+    String welcomeText =
+        "${AppLocalizations.of(context)!.home_welcome} ${userProvider.user!.display_name ?? ''}";
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -65,10 +69,7 @@ class _HomeAddState extends State<HomeAdd> {
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 children: [
-                  Center(
-                      child: Text(
-                          "Bienvenue ${userProvider.user!.display_name}",
-                          style: classicText())),
+                  Center(child: Text(welcomeText, style: classicText())),
                   const SizedBox(height: 30),
                   Center(
                     child: Container(
@@ -94,15 +95,31 @@ class _HomeAddState extends State<HomeAdd> {
                           const SizedBox(height: 30),
                           ElevatedButton(
                             onPressed: () async {
-                              LocalProduct? result =
-                                  await ProductService().scanAndSaveProduct();
+                              LocalProduct? result;
+                              try {
+                                result =
+                                    await ProductService().scanAndSaveProduct();
+                              } on Exception catch (e) {
+                                showErrorSnackbar(
+                                    context,
+                                    AppLocalizations.of(context)!
+                                        .error_find_product);
+                                showReportDialog(context, null);
+                              }
 
                               if (result != null) {
                                 showReportDialog(context, result);
+                              } else {
+                                showErrorSnackbar(
+                                    context,
+                                    AppLocalizations.of(context)!
+                                        .error_find_product);
+                                showReportDialog(context, null);
                               }
                             },
                             style: btnPrimaryStyle(context),
-                            child: const Text("Scanner un produit"),
+                            child:
+                                Text(AppLocalizations.of(context)!.produt_scan),
                           ),
                           const SizedBox(height: 30),
                           ElevatedButton(
@@ -110,7 +127,8 @@ class _HomeAddState extends State<HomeAdd> {
                               showReportDialog(context, null);
                             },
                             style: btnPrimaryStyle(context),
-                            child: const Text("Ajouter un produit"),
+                            child:
+                                Text(AppLocalizations.of(context)!.product_add),
                           )
                         ],
                       ),
