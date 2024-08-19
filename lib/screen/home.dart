@@ -1,7 +1,7 @@
 import 'package:Trovu/provider/user_provider.dart';
 import 'package:Trovu/screen/dashboard.dart';
 import 'package:Trovu/screen/home_add.dart';
-import 'package:Trovu/screen/search.dart';
+import 'package:Trovu/screen/fridge.dart';
 import 'package:Trovu/styles/button_style.dart';
 import 'package:Trovu/styles/snackbar_style.dart';
 import 'package:Trovu/styles/text_style.dart';
@@ -27,7 +27,7 @@ class _HomeState extends State<Home> {
 
   final List<Widget> _pages = [
     const HomeAdd(),
-    const Search(),
+    const Fridge(),
     const Dashboard(),
   ];
 

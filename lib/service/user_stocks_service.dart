@@ -76,4 +76,17 @@ class UserStocksService {
       rethrow;
     }
   }
+
+  Future<List<UserStock>> getUserStockListById(String userId) async {
+    try {
+      final result =
+          await supabase.from('user_stocks').select().eq("user_id", userId);
+
+      final data = result as List<dynamic>;
+
+      return data.map((item) => UserStock.fromJson(item)).toList();
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
