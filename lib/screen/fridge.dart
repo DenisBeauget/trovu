@@ -12,12 +12,7 @@ class Fridge extends StatefulWidget {
 
 class _FridgeState extends State<Fridge> {
   UserProduct userProduct1 = UserProduct(
-      name: 'Sirop',
-      nutriscore: 'A',
-      quantity: 1,
-      date: '21/08/2024',
-      imageUrl:
-          'https://play-lh.googleusercontent.com/ZvMvaLTdYMrD6U1B3wPKL6siMYG8nSTEnzhLiMsH7QHwQXs3ZzSZuYh3_PTxoU5nKqU');
+      name: 'Sirop', nutriscore: 'A', quantity: 1, date: '21/08/2024');
   UserProduct userProduct2 = UserProduct(
       name: 'Sirop',
       nutriscore: 'A',

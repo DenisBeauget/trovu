@@ -1,4 +1,6 @@
 import 'package:Trovu/model/user_product.dart';
+import 'package:Trovu/styles/text_style.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class ProductCard extends StatelessWidget {
@@ -7,8 +9,10 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String? imageUrl = userProduct.imageUrl;
+    String? imageUrl = userProduct.imageUrl ?? "";
+
     return Card(
+      surfaceTintColor: Theme.of(context).colorScheme.primary,
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       child: IntrinsicHeight(
         child: Row(
@@ -17,10 +21,15 @@ class ProductCard extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: CircleAvatar(
                 radius: 30,
-                backgroundImage: NetworkImage(imageUrl!),
+                backgroundImage: imageUrl.isEmpty
+                    ? const AssetImage('assets/images/clean-wall-texture.png')
+                    : NetworkImage(imageUrl),
               ),
             ),
-            const VerticalDivider(thickness: 1, width: 1),
+            VerticalDivider(
+                thickness: 1,
+                width: 12,
+                color: Theme.of(context).colorScheme.primary),
             Expanded(
               child: Padding(
                 padding:
@@ -29,22 +38,34 @@ class ProductCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('name ${userProduct.name}',
-                        style: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold)),
+                    Text(userProduct.name, style: classicMediumText()),
                     const SizedBox(height: 4),
-                    Text('Date limite: ${userProduct.date}',
-                        style: const TextStyle(fontSize: 14)),
+                    Text(
+                        "${AppLocalizations.of(context)!.product_card_date} ${userProduct.date}",
+                        style: classicMediumText()),
                     const SizedBox(height: 4),
-                    Text('Quantité:  ${userProduct.quantity}',
-                        style: const TextStyle(fontSize: 14)),
+                    Row(
+                      children: [
+                        Text(
+                            "${AppLocalizations.of(context)!.product_card_quantity}   ${userProduct.quantity}",
+                            style: classicMediumText()),
+                        IconButton(
+                            onPressed: () {},
+                            icon: Icon(Icons.add,
+                                color: Theme.of(context).colorScheme.primary))
+                      ],
+                    ),
                   ],
                 ),
               ),
             ),
-            const VerticalDivider(thickness: 1, width: 1),
+            VerticalDivider(
+                thickness: 1,
+                width: 12,
+                color: Theme.of(context).colorScheme.primary),
             IconButton(
-              icon: const Icon(Icons.gavel_sharp, color: Colors.red),
+              icon: Icon(Icons.restaurant,
+                  color: Theme.of(context).colorScheme.primary),
               onPressed: () {},
             ),
           ],
