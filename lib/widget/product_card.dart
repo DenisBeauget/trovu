@@ -1,15 +1,26 @@
 import 'package:Trovu/model/user_product.dart';
+import 'package:Trovu/service/user_stocks_service.dart';
+import 'package:Trovu/styles/snackbar_style.dart';
 import 'package:Trovu/styles/text_style.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ProductCard extends StatelessWidget {
   final UserProduct userProduct;
-  const ProductCard({super.key, required this.userProduct});
+  final Function onDelete;
+  final Function onAdd;
+  const ProductCard(
+      {super.key,
+      required this.userProduct,
+      required this.onDelete,
+      required this.onAdd});
 
   @override
   Widget build(BuildContext context) {
     String? imageUrl = userProduct.imageUrl ?? "";
+    final supabase = Supabase.instance.client;
 
     return Card(
       surfaceTintColor: Theme.of(context).colorScheme.primary,
@@ -41,7 +52,7 @@ class ProductCard extends StatelessWidget {
                     Text(userProduct.name, style: classicMediumText()),
                     const SizedBox(height: 4),
                     Text(
-                        "${AppLocalizations.of(context)!.product_card_date} ${userProduct.date}",
+                        "${AppLocalizations.of(context)!.product_card_date} ${_formatDate(userProduct.date)}",
                         style: classicMediumText()),
                     const SizedBox(height: 4),
                     Row(
@@ -50,7 +61,21 @@ class ProductCard extends StatelessWidget {
                             "${AppLocalizations.of(context)!.product_card_quantity}   ${userProduct.quantity}",
                             style: classicMediumText()),
                         IconButton(
-                            onPressed: () {},
+                            onPressed: () async {
+                              try {
+                                UserStocksService().updateUserStockQuantityById(
+                                    supabase.auth.currentUser!.id,
+                                    userProduct.productId,
+                                    1);
+                                onAdd();
+                              } catch (e) {
+                                rethrow;
+                              }
+                              showReportSnackbar(
+                                  context,
+                                  AppLocalizations.of(context)!
+                                      .product_card_on_add);
+                            },
                             icon: Icon(Icons.add,
                                 color: Theme.of(context).colorScheme.primary))
                       ],
@@ -66,11 +91,35 @@ class ProductCard extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.restaurant,
                   color: Theme.of(context).colorScheme.primary),
-              onPressed: () {},
+              onPressed: () async {
+                try {
+                  UserStocksService().deleteUserStockByID(
+                      supabase.auth.currentUser!.id, userProduct.productId);
+                  onDelete();
+                } catch (e) {
+                  rethrow;
+                }
+
+                showReportSnackbar(context,
+                    AppLocalizations.of(context)!.product_card_on_delete);
+              },
             ),
           ],
         ),
       ),
     );
+  }
+
+  String _formatDate(String? dateString) {
+    if (dateString == null) {
+      return "X";
+    }
+
+    try {
+      final dateTime = DateTime.parse(dateString);
+      return DateFormat('dd/MM/yyyy').format(dateTime);
+    } catch (e) {
+      rethrow;
+    }
   }
 }

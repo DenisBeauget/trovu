@@ -162,7 +162,7 @@ void showReportDialog(BuildContext context, LocalProduct? product) {
                       .insertUserStock(productInsert!, quantity, databaseDate);
 
                   if (result != null) {
-                    showReportSnackbar(context);
+                    showReportSnackbar(context, "");
                   } else {
                     showErrorSnackbar(
                         context, AppLocalizations.of(context)!.popup_add_error);

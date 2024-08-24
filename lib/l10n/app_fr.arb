@@ -37,5 +37,8 @@
     "snackbar_add": "Produit ajouté",
     "snackbar_close": "Fermer",
     "product_card_date": "Date limite :",
-    "product_card_quantity": "Quantité :"
+    "product_card_quantity": "Quantité :",
+    "product_card_on_delete": "Produit supprimé",
+    "product_card_on_add": "Quantité mise à jour"
+
 }

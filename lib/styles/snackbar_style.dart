@@ -64,7 +64,7 @@ void showLoginSnackbar(BuildContext context) {
   ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }
 
-void showReportSnackbar(BuildContext context) {
+void showReportSnackbar(BuildContext context, String? text) {
   final snackBar = SnackBar(
     backgroundColor: Theme.of(context).primaryColor,
     behavior: SnackBarBehavior.floating,
@@ -84,7 +84,7 @@ void showReportSnackbar(BuildContext context) {
               color: const ColorScheme.light().onPrimaryContainer),
         ),
         Text(
-          AppLocalizations.of(context)!.snackbar_add,
+          text!.isEmpty ? AppLocalizations.of(context)!.snackbar_add : text,
           style: TextStyle(color: const ColorScheme.light().onPrimaryContainer),
         ),
       ],

@@ -1,11 +1,13 @@
 class UserProduct {
+  final String productId;
   final String name;
-  final int quantity;
+  int quantity;
   final String? nutriscore;
   final String? date;
   final String? imageUrl;
 
   UserProduct({
+    required this.productId,
     required this.name,
     required this.nutriscore,
     required this.quantity,
@@ -15,6 +17,7 @@ class UserProduct {
 
   factory UserProduct.fromJson(Map<String, dynamic> json) {
     return UserProduct(
+      productId: json['product_id'],
       name: json['name'],
       nutriscore: json['nutriscore'],
       quantity: json['quantity'],
@@ -25,6 +28,7 @@ class UserProduct {
 
   Map<String, dynamic> toJson() {
     return {
+      "product_id": productId,
       'name': name,
       'nutriscore': nutriscore,
       'quantity': quantity,

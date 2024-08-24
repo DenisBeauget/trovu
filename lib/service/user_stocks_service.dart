@@ -89,4 +89,18 @@ class UserStocksService {
       rethrow;
     }
   }
+
+  Future<bool> deleteUserStockByID(String userId, String productId) async {
+    try {
+      await supabase
+          .from('user_stocks')
+          .delete()
+          .eq("user_id", userId)
+          .eq("product_id", productId);
+
+      return true;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
