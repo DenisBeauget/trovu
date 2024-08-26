@@ -76,15 +76,20 @@ class _FridgeState extends State<Fridge> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: TextField(
-          controller: searchController,
-          decoration: InputDecoration(
-            hintText: 'Rechercher...',
-            hintStyle: TextStyle(color: Theme.of(context).primaryColor),
-            icon: Icon(Icons.search, color: Theme.of(context).primaryColor),
+        title: Column(children: [
+          TextField(
+            controller: searchController,
+            decoration: InputDecoration(
+              enabledBorder: OutlineInputBorder(
+                  borderSide:
+                      BorderSide(color: Theme.of(context).primaryColor)),
+              hintText: 'Rechercher...',
+              hintStyle: TextStyle(color: Theme.of(context).primaryColor),
+              icon: Icon(Icons.search, color: Theme.of(context).primaryColor),
+            ),
+            style: const TextStyle(color: Colors.white),
           ),
-          style: const TextStyle(color: Colors.white),
-        ),
+        ]),
       ),
       body: _isLoading
           ? Center(

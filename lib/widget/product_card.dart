@@ -31,7 +31,7 @@ class ProductCard extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: CircleAvatar(
-                radius: 30,
+                radius: 40,
                 backgroundImage: imageUrl.isEmpty
                     ? const AssetImage('assets/images/clean-wall-texture.png')
                     : NetworkImage(imageUrl),
@@ -53,7 +53,10 @@ class ProductCard extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                         "${AppLocalizations.of(context)!.product_card_date} ${_formatDate(userProduct.date)}",
-                        style: classicMediumText()),
+                        style: TextStyle(
+                            color: _formatColor(userProduct.date),
+                            fontSize: 12,
+                            fontWeight: FontWeight.normal)),
                     const SizedBox(height: 4),
                     Row(
                       children: [
@@ -121,5 +124,23 @@ class ProductCard extends StatelessWidget {
     } catch (e) {
       rethrow;
     }
+  }
+
+  Color _formatColor(String? date) {
+    final dateString = DateTime.parse(date!);
+    final now = DateTime.now();
+
+    final difference = dateString.difference(now).inDays;
+
+    switch (difference) {
+      case -10:
+        return Colors.green;
+      case -3:
+        return Colors.orange;
+      case > 1:
+        return Colors.red;
+    }
+
+    return Colors.black;
   }
 }
