@@ -35,5 +35,9 @@
     "popup_add_button": "Add",
     "popup_add_error": "Error, try again",
     "snackbar_add": "Product added!",
-    "snackbar_close": "Close"
+    "snackbar_close": "Close",
+    "product_card_date": "Limit date:",
+    "product_card_quantity": "Quantity:",
+    "product_card_on_delete": "Product deleted",
+    "product_card_on_add": "Quantity updated"
 }
