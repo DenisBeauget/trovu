@@ -53,6 +53,7 @@ class _HomeAddState extends State<HomeAdd> {
     String welcomeText =
         "${AppLocalizations.of(context)!.home_welcome} ${userProvider.user!.display_name ?? ''}";
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: SingleChildScrollView(
         child: Column(
           children: [

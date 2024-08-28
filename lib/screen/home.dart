@@ -41,7 +41,7 @@ class _HomeState extends State<Home> {
     }
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         automaticallyImplyLeading: false,
         centerTitle: true,
         actions: <Widget>[
@@ -101,32 +101,49 @@ class _HomeState extends State<Home> {
     showDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          title: Center(
-              child: Text(AppLocalizations.of(context)!.home_qr_code,
-                  style: classicText())),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              QrImageView(
-                data: 'https://flutter.dev',
-                version: QrVersions.auto,
-                embeddedImage: const AssetImage('assets/trovu_icon.png'),
-                embeddedImageStyle: QrEmbeddedImageStyle(
-                    size: const Size(50, 50),
-                    color: Theme.of(context).colorScheme.primary),
-                size: 200.0,
+        return Dialog(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: 500,
+              maxHeight: MediaQuery.of(context).size.height * 0.6,
+            ),
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      AppLocalizations.of(context)!.home_qr_code,
+                      style: classicText(),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 20),
+                    QrImageView(
+                      data: 'https://flutter.dev',
+                      version: QrVersions.auto,
+                      embeddedImage: const AssetImage('assets/trovu_icon.png'),
+                      embeddedImageStyle: QrEmbeddedImageStyle(
+                        size: const Size(50, 50),
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      size: 200.0,
+                    ),
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: () {
+                        Share.share(
+                            'Téléchargez notre application ici : https://flutter.dev');
+                      },
+                      style: btnPrimaryStyle(context),
+                      child:
+                          Text(AppLocalizations.of(context)!.home_share_button),
+                    ),
+                    const SizedBox(height: 20),
+                  ],
+                ),
               ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  Share.share(
-                      'Téléchargez notre application ici : https://flutter.dev');
-                },
-                style: btnPrimaryStyle(context),
-                child: Text(AppLocalizations.of(context)!.home_share_button),
-              ),
-            ],
+            ),
           ),
         );
       },

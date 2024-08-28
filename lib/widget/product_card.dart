@@ -31,7 +31,7 @@ class ProductCard extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: CircleAvatar(
-                radius: 40,
+                radius: 30,
                 backgroundImage: imageUrl.isEmpty
                     ? const AssetImage('assets/images/clean-wall-texture.png')
                     : NetworkImage(imageUrl),
@@ -130,14 +130,18 @@ class ProductCard extends StatelessWidget {
     final dateString = DateTime.parse(date!);
     final now = DateTime.now();
 
-    final difference = dateString.difference(now).inDays;
+    final dateNoHours =
+        DateTime(dateString.year, dateString.month, dateString.day);
+    final today = DateTime(now.year, now.month, now.day);
+
+    final difference = today.difference(dateNoHours).inDays;
 
     switch (difference) {
-      case -10:
+      case <= -10:
         return Colors.green;
-      case -3:
+      case > -10 && <= -1:
         return Colors.orange;
-      case > 1:
+      case >= 0:
         return Colors.red;
     }
 
