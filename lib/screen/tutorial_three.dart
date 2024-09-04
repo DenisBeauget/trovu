@@ -1,7 +1,13 @@
-import 'package:Trovu/styles/buttonStyle.dart';
+import 'package:Trovu/screen/auth.dart';
+import 'package:Trovu/screen/connexion.dart';
+import 'package:Trovu/screen/home.dart';
+import 'package:Trovu/screen/inscription.dart';
+import 'package:Trovu/service/supabase_auth.dart';
+import 'package:Trovu/styles/button_style.dart';
 import 'package:flutter/material.dart';
-import 'package:Trovu/styles/textStyle.dart';
+import 'package:Trovu/styles/text_style.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class TutorialThree extends StatelessWidget {
   const TutorialThree({super.key});
@@ -36,9 +42,12 @@ class TutorialThree extends StatelessWidget {
                         )),
                     const SizedBox(height: 100),
                     ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          redirectAfterTutorial(context);
+                        },
                         style: btnPrimaryStyle(context),
-                        child: const Text("C'est parti !")),
+                        child: Text(AppLocalizations.of(context)!
+                            .tutorial_three_button)),
                     const SizedBox(height: 30),
                   ],
                 ),
@@ -47,4 +56,28 @@ class TutorialThree extends StatelessWidget {
           )),
     );
   }
+}
+
+void redirectAfterTutorial(BuildContext context) {
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    try {
+      if (Supabase.instance.client.auth.currentUser != null) {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (context) => const Home(showSnackbar: false)),
+            (route) => false);
+      } else {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const Auth()),
+            (route) => false);
+      }
+    } catch (e) {
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const Auth()),
+          (route) => false);
+    }
+  });
 }

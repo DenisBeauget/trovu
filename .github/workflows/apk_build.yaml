@@ -28,8 +28,11 @@ jobs:
           key: ${{ runner.os }}-buildx-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-buildx-
+
       - name: Build Docker image
         run: |
+          echo "SUPABASE_KEY=${{ secrets.SECRET_KEY }}" > .env
+          echo "WEB_CLIENT_ID=${{ secrets.WEB_CLIENT_ID }}" > .env
           docker build -t flutter-build .
       - name: Run Docker container
         run: |
