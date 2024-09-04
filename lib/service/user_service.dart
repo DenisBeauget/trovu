@@ -5,6 +5,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class UserService {
+  static final supabase = Supabase.instance.client;
+
   Future<void> saveUser(UserModel user) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString('user', jsonEncode(user.toJson()));
@@ -46,5 +48,14 @@ class UserService {
       return user;
     }
     return null;
+  }
+
+  Future<int> getTotalReportForUser(String userId) async {
+    final response = await supabase
+        .from('users')
+        .select('total_report')
+        .eq("id", userId)
+        .maybeSingle();
+    return response?['total_report'] as int;
   }
 }
