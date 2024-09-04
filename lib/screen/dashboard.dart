@@ -41,7 +41,7 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
-    final userName = userProvider.user?.display_name ?? 'Utilisateur';
+    final userName = userProvider.user?.display_name ?? 'Trovusien';
 
     return Scaffold(
       backgroundColor: const Color(0xFFF5EFE6),
@@ -49,28 +49,28 @@ class _DashboardState extends State<Dashboard> {
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 'Bienvenue, $userName',
-                style: const TextStyle(
-                  fontSize: 24,
+                style:  TextStyle(
+                  fontSize: 28,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF4A5D23),
+                  color: Theme.of(context).primaryColor,
                 ),
               ),
               const SizedBox(height: 8),
-              const Text(
+               Text(
                 'Voici votre tableau de bord Trovu',
                 style: TextStyle(
-                  fontSize: 16,
-                  color: Color(0xFF6E7F3E),
+                  fontSize: 18,
+                  color: Theme.of(context).colorScheme.inversePrimary,
                 ),
               ),
               const SizedBox(height: 24),
-              _buildStatisticsCard(),
+              _buildStatisticsOverview(),
               const SizedBox(height: 24),
-              _buildAccountCard()
+              _buildAccountCard(),
             ],
           ),
         ),
@@ -78,53 +78,51 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
-  Widget _buildStatisticsCard() {
-    return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.inversePrimary,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(12),
-                topRight: Radius.circular(12),
-              ),
-            ),
-            child: Row(
+  Widget _buildStatisticsOverview() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        _buildCircularStat('Produits totaux', totalReport, Icons.inventory),
+        _buildCircularStat('Dans votre frigo', totalProduct, Icons.kitchen),
+      ],
+    );
+  }
+
+  Widget _buildCircularStat(String title, int value, IconData icon) {
+    return Column(
+      children: [
+        Container(
+          width: 120,
+          height: 120,
+          decoration: const BoxDecoration(
+            shape: BoxShape.circle,
+            color:  Color(0xFFD9E4C7),
+          ),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.analytics, color: Theme.of(context).primaryColor),
-                const SizedBox(width: 8),
+                Icon(icon, size: 36, color: Theme.of(context).primaryColor),
+                const SizedBox(height: 4),
                 Text(
-                  'Statistiques de votre compte Trovu',
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onSurface,
-                    fontSize: 18,
+                  value.toString(),
+                  style:  TextStyle(
+                    fontSize: 24,
                     fontWeight: FontWeight.bold,
+                    color: Theme.of(context).primaryColor,
                   ),
                 ),
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                _buildStatItem(
-                    Icons.inventory, 'Nombre total de produits', totalReport),
-                const SizedBox(height: 16),
-                _buildStatItem(
-                    Icons.kitchen, 'Produits dans votre frigo', totalProduct),
-                const SizedBox(height: 16),
-                _buildStatItem(Icons.score, 'Nutriscore moyen', 'B'),
-              ],
-            ),
-          ),
-        ],
-      ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          title,
+          style:  TextStyle(fontSize: 16, color:Theme.of(context).primaryColor),
+          textAlign: TextAlign.center,
+        ),
+      ],
     );
   }
 
@@ -147,8 +145,7 @@ class _DashboardState extends State<Dashboard> {
             ),
             child: Row(
               children: [
-                Icon(Icons.manage_accounts,
-                    color: Theme.of(context).primaryColor),
+                Icon(Icons.manage_accounts, color: Theme.of(context).primaryColor),
                 const SizedBox(width: 8),
                 const Text(
                   'Votre compte Trovu',
@@ -165,11 +162,9 @@ class _DashboardState extends State<Dashboard> {
             padding: const EdgeInsets.all(16),
             child: Column(
               children: [
-                _buildStatItem(
-                    Icons.person, 'Nom : ', userProvider.user?.display_name),
+                _buildStatItem(Icons.person, 'Nom : ', userProvider.user?.display_name),
                 const SizedBox(height: 16),
-                _buildStatItem(
-                    Icons.email, 'Email : ', userProvider.user?.email),
+                _buildStatItem(Icons.email, 'Email : ', userProvider.user?.email),
               ],
             ),
           ),
@@ -189,12 +184,15 @@ class _DashboardState extends State<Dashboard> {
             Text(label, style: const TextStyle(fontSize: 16)),
           ],
         ),
-        Text(
-          value.toString(),
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: Theme.of(context).primaryColor,
+        Flexible(
+          child: Text(
+            value.toString(),
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).primaryColor,
+            ),
+            overflow: TextOverflow.ellipsis,
           ),
         ),
       ],
